@@ -1,11 +1,9 @@
 vim.opt.rtp:append "/home/tjdevries/plugins/misery.nvim"
 vim.opt.rtp:append "/home/tjdevries/plugins/websocket.nvim"
-vim.opt.rtp:append "/home/tjdevries/plugins/colorbuddy.nvim"
 
 vim.cmd.source "/home/tjdevries/plugins/misery.nvim/plugin/misery.lua"
 
 -- vim.cmd [[hi clear]]
-vim.cmd.colorscheme "colorbuddy"
 
 -- vim.defer_fn(function()
 --   vim.cmd [[hi clear]]

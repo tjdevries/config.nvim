@@ -66,6 +66,13 @@ return {
             codelens = { enable = true },
           },
 
+          filetypes = {
+            "ocaml",
+            "ocaml.interface",
+            "ocaml.menhir",
+            "ocaml.cram",
+          },
+
           -- TODO: Check if i still need the filtypes stuff i had before
         },
 
