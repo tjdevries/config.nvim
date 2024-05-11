@@ -23,6 +23,13 @@ cmp.setup {
       { "i", "c" }
     ),
   },
+
+  -- Enable luasnip to handle snippet expansion for nvim-cmp
+  snippet = {
+    expand = function(args)
+      require("luasnip").lsp_expand(args.body)
+    end,
+  },
 }
 
 -- Setup up vim-dadbod
@@ -38,6 +45,10 @@ ls.config.set_config {
   history = false,
   updateevents = "TextChanged,TextChangedI",
 }
+
+for _, ft_path in ipairs(vim.api.nvim_get_runtime_file("lua/custom/snippets/*.lua", true)) do
+  loadfile(ft_path)()
+end
 
 vim.keymap.set({ "i", "s" }, "<c-k>", function()
   if ls.expand_or_jumpable() then
