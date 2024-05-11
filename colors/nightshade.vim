@@ -1,3 +1,8 @@
+" ==================================================================================
+"               This is only here because @nightshadedude is a mod
+" ==================================================================================
+"
+"
 " Vim color file
 " Maintainer:	Dave Turner <turner@ameslab.gov>
 " Last Change:	2005 June 2

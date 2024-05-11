@@ -9,6 +9,9 @@ return {
 
       { "j-hui/fidget.nvim", opts = {} },
 
+      -- Autoformatting
+      "stevearc/conform.nvim",
+
       -- Schema information
       "b0o/SchemaStore.nvim",
     },
@@ -143,6 +146,23 @@ return {
           if disable_semantic_tokens[filetype] then
             client.server_capabilities.semanticTokensProvider = nil
           end
+        end,
+      })
+
+      -- Autoformatting Setup
+      require("conform").setup {
+        formatters_by_ft = {
+          lua = { "stylua" },
+        },
+      }
+
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        callback = function(args)
+          require("conform").format {
+            bufnr = args.buf,
+            lsp_fallback = true,
+            quiet = true,
+          }
         end,
       })
     end,

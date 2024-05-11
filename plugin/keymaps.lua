@@ -1,14 +1,17 @@
-vim.keymap.set("n", "<c-j>", "<c-w><c-j>")
-vim.keymap.set("n", "<c-k>", "<c-w><c-k>")
-vim.keymap.set("n", "<c-l>", "<c-w><c-l>")
-vim.keymap.set("n", "<c-h>", "<c-w><c-h>")
+local set = vim.keymap.set
 
-vim.keymap.set("n", "<leader>x", "<cmd>.lua<CR>")
-vim.keymap.set("n", "<leader><leader>x", "<cmd>source %<CR>")
+-- Basic movement keybinds, these make navigating splits easy for me
+set("n", "<c-j>", "<c-w><c-j>")
+set("n", "<c-k>", "<c-w><c-k>")
+set("n", "<c-l>", "<c-w><c-l>")
+set("n", "<c-h>", "<c-w><c-h>")
 
-vim.keymap.set("n", "-", "<cmd>edit %:h<CR>")
+set("n", "<leader>x", "<cmd>.lua<CR>", { desc = "Execute the current line" })
+set("n", "<leader><leader>x", "<cmd>source %<CR>", { desc = "Execute the current file" })
 
-vim.keymap.set("n", "<CR>", function()
+-- Toggle hlsearch if it's on, otherwise just do "enter"
+set("n", "<CR>", function()
+  ---@diagnostic disable-next-line: undefined-field
   if vim.opt.hlsearch:get() then
     vim.cmd.nohl()
     return ""
@@ -17,18 +20,23 @@ vim.keymap.set("n", "<CR>", function()
   end
 end, { expr = true })
 
-vim.keymap.set("n", "<left>", "gT")
-vim.keymap.set("n", "<right>", "gt")
+-- Normally these are not good mappings, but I have left/right on my thumb
+-- cluster, so navigating tabs is quite easy this way.
+set("n", "<left>", "gT")
+set("n", "<right>", "gt")
 
-vim.keymap.set("n", "<space>dn", vim.diagnostic.goto_next)
-vim.keymap.set("n", "<space>dp", vim.diagnostic.goto_prev)
+-- There are builtin keymaps for this now, but I like that it shows
+-- the float when I navigate to the error - so I override them.
+set("n", "]d", vim.diagnostic.goto_next)
+set("n", "[d", vim.diagnostic.goto_prev)
 
-vim.keymap.set("n", "<M-,>", "<c-w>5<")
-vim.keymap.set("n", "<M-.>", "<c-w>5>")
-vim.keymap.set("n", "<A-t>", "<C-W>+")
-vim.keymap.set("n", "<A-s>", "<C-W>-")
+-- These mappings control the size of splits (height/width)
+set("n", "<M-,>", "<c-w>5<")
+set("n", "<M-.>", "<c-w>5>")
+set("n", "<M-t>", "<C-W>+")
+set("n", "<M-s>", "<C-W>-")
 
-vim.keymap.set("n", "<M-j>", function()
+set("n", "<M-j>", function()
   if vim.opt.diff:get() then
     vim.cmd [[normal! ]c]]
   else
@@ -36,7 +44,7 @@ vim.keymap.set("n", "<M-j>", function()
   end
 end)
 
-vim.keymap.set("n", "<M-k>", function()
+set("n", "<M-k>", function()
   if vim.opt.diff:get() then
     vim.cmd [[normal! [c]]
   else

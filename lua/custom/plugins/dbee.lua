@@ -1,3 +1,5 @@
+-- For now, I'm going to stick with dadbod,
+-- but if the completion continues to improve I will probably switch
 return {
   {
     "kndndrj/nvim-dbee",
