@@ -32,7 +32,21 @@ return {
 
       local servers = {
         bashls = true,
-        gopls = true,
+        gopls = {
+          settings = {
+            gopls = {
+              hints = {
+                assignVariableTypes = true,
+                compositeLiteralFields = true,
+                compositeLiteralTypes = true,
+                constantValues = true,
+                functionTypeParameters = true,
+                parameterNames = true,
+                rangeVariableTypes = true,
+              },
+            },
+          },
+        },
         lua_ls = true,
         rust_analyzer = true,
         svelte = true,
@@ -67,6 +81,7 @@ return {
           manual_install = true,
           settings = {
             codelens = { enable = true },
+            inlayHints = { enable = true },
           },
 
           filetypes = {
