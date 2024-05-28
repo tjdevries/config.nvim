@@ -7,6 +7,8 @@ vim.api.nvim_create_autocmd("TermOpen", {
     set.number = false
     set.relativenumber = false
     set.scrolloff = 0
+
+    vim.bo.filetype = "terminal"
   end,
 })
 

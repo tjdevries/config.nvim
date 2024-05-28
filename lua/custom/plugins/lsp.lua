@@ -47,14 +47,23 @@ return {
             },
           },
         },
-        lua_ls = true,
+        lua_ls = {
+          server_capabilities = {
+            semanticTokensProvider = vim.NIL,
+          },
+        },
         rust_analyzer = true,
         svelte = true,
         templ = true,
         cssls = true,
 
         -- Probably want to disable formatting for this lang server
-        tsserver = true,
+        tsserver = {
+          server_capabilities = {
+            documentFormattingProvider = false,
+          },
+        },
+        biome = true,
 
         jsonls = {
           settings = {
@@ -94,9 +103,23 @@ return {
           -- TODO: Check if i still need the filtypes stuff i had before
         },
 
+        elixirls = {
+          cmd = { "/home/tjdevries/.local/share/nvim/mason/bin/elixir-ls" },
+          root_dir = require("lspconfig.util").root_pattern { "mix.exs" },
+          server_capabilities = {
+            -- completionProvider = true,
+            -- definitionProvider = false,
+            documentFormattingProvider = false,
+          },
+        },
+
         lexical = {
           cmd = { "/home/tjdevries/.local/share/nvim/mason/bin/lexical", "server" },
           root_dir = require("lspconfig.util").root_pattern { "mix.exs" },
+          server_capabilities = {
+            completionProvider = vim.NIL,
+            definitionProvider = false,
+          },
         },
 
         clangd = {
@@ -147,9 +170,16 @@ return {
           local bufnr = args.buf
           local client = assert(vim.lsp.get_client_by_id(args.data.client_id), "must have valid client")
 
+          local settings = servers[client.name]
+          if type(settings) ~= "table" then
+            settings = {}
+          end
+
+          local builtin = require "telescope.builtin"
+
           vim.opt_local.omnifunc = "v:lua.vim.lsp.omnifunc"
-          vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = 0 })
-          vim.keymap.set("n", "gr", vim.lsp.buf.references, { buffer = 0 })
+          vim.keymap.set("n", "gd", builtin.lsp_definitions, { buffer = 0 })
+          vim.keymap.set("n", "gr", builtin.lsp_references, { buffer = 0 })
           vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { buffer = 0 })
           vim.keymap.set("n", "gT", vim.lsp.buf.type_definition, { buffer = 0 })
           vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = 0 })
@@ -160,6 +190,18 @@ return {
           local filetype = vim.bo[bufnr].filetype
           if disable_semantic_tokens[filetype] then
             client.server_capabilities.semanticTokensProvider = nil
+          end
+
+          -- Override server capabilities
+          if settings.server_capabilities then
+            for k, v in pairs(settings.server_capabilities) do
+              if v == vim.NIL then
+                ---@diagnostic disable-next-line: cast-local-type
+                v = nil
+              end
+
+              client.server_capabilities[k] = v
+            end
           end
         end,
       })

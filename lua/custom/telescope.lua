@@ -37,3 +37,7 @@ end)
 vim.keymap.set("n", "<space>en", function()
   builtin.find_files { cwd = vim.fn.stdpath "config" }
 end)
+
+vim.keymap.set("n", "<space>eo", function()
+  builtin.find_files { cwd = "~/.config/nvim-backup/" }
+end)
