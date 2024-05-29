@@ -6,7 +6,7 @@ return {
     },
     build = ":TSUpdate",
     branch = "main",
-    lazy = false,
+    event = { "LazyFile", "VeryLazy" },
     config = function()
       require("custom.treesitter").setup()
     end,
