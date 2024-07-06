@@ -1,5 +1,7 @@
 local set = vim.keymap.set
 local k = vim.keycode
+local f = require "custom.f"
+local fn = f.fn
 
 -- Basic movement keybinds, these make navigating splits easy for me
 set("n", "<c-j>", "<c-w><c-j>")
@@ -28,8 +30,8 @@ set("n", "<right>", "gt")
 
 -- There are builtin keymaps for this now, but I like that it shows
 -- the float when I navigate to the error - so I override them.
-set("n", "]d", vim.diagnostic.goto_next)
-set("n", "[d", vim.diagnostic.goto_prev)
+set("n", "]d", fn(vim.diagnostic.jump, { count = 1, float = true }))
+set("n", "[d", fn(vim.diagnostic.jump, { count = -1, float = true }))
 
 -- These mappings control the size of splits (height/width)
 set("n", "<M-,>", "<c-w>5<")

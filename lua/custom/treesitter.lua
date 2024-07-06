@@ -41,6 +41,27 @@ M.setup = function()
           files = { "src/parser.c", "src/scanner.c" },
         },
       }
+
+      -- parsers.menhir = {
+      --   tier = 0,
+      --
+      --   ---@diagnostic disable-next-line: missing-fields
+      --   install_info = {
+      --     path = "~/git/tree-sitter-ocaml",
+      --     location = "grammars/menhir",
+      --     files = { "src/parser.c", "src/scanner.c" },
+      --   },
+      -- }
+
+      parsers.cram = {
+        tier = 0,
+
+        ---@diagnostic disable-next-line: missing-fields
+        install_info = {
+          path = "~/git/tree-sitter-cram",
+          files = { "src/parser.c" },
+        },
+      }
     end,
   })
 end

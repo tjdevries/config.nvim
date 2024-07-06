@@ -8,6 +8,7 @@ return {
       "WhoIsSethDaniel/mason-tool-installer.nvim",
 
       { "j-hui/fidget.nvim", opts = {} },
+      { "https://git.sr.ht/~whynothugo/lsp_lines.nvim" },
 
       -- Autoformatting
       "stevearc/conform.nvim",
@@ -56,6 +57,9 @@ return {
         svelte = true,
         templ = true,
         cssls = true,
+        taplo = true,
+
+        pyright = true,
 
         -- Probably want to disable formatting for this lang server
         tsserver = {
@@ -81,7 +85,7 @@ return {
                 enable = false,
                 url = "",
               },
-              schemas = require("schemastore").yaml.schemas(),
+              -- schemas = require("schemastore").yaml.schemas(),
             },
           },
         },
@@ -91,16 +95,34 @@ return {
           settings = {
             codelens = { enable = true },
             inlayHints = { enable = true },
+            syntaxDocumentation = { enable = true },
           },
+
+          -- get_language_id = function(lang)
+          --   local map = {
+          --     ["ocaml.mlx"] = "mlx",
+          --   }
+          --   return map[lang] or lang
+          -- end,
 
           filetypes = {
             "ocaml",
             "ocaml.interface",
             "ocaml.menhir",
             "ocaml.cram",
+            "ocaml.mlx",
+            "ocaml.ocamllex",
+          },
+
+          server_capabilities = {
+            semanticTokensProvider = false,
           },
 
           -- TODO: Check if i still need the filtypes stuff i had before
+        },
+
+        gleam = {
+          manual_install = true,
         },
 
         elixirls = {
@@ -123,9 +145,11 @@ return {
         },
 
         clangd = {
+          -- cmd = { "clangd", unpack(require("custom.clangd").flags) },
           -- TODO: Could include cmd, but not sure those were all relevant flags.
           --    looks like something i would have added while i was floundering
           init_options = { clangdFileStatus = true },
+
           filetypes = { "c" },
         },
       }
@@ -222,6 +246,9 @@ return {
           }
         end,
       })
+
+      require("lsp_lines").setup()
+      vim.diagnostic.config { virtual_text = false }
     end,
   },
 }
