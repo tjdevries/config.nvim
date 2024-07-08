@@ -1067,11 +1067,14 @@ local function extend_pre(out, state)
                 break
               end
             end
-            assert(index, "a coles tag which has no corresponding open tag")
-            for idx = index + 1, #stack do
-              s = s .. (name_to_tag(state.highlights_name[stack[idx]]))
+            -- local name = state.highlights_name[hlid]
+            -- assert(index, string.format("a close tag which has no corresponding open tag: %s:%s", hlid, name))
+            if index then
+              for idx = index + 1, #stack do
+                s = s .. (name_to_tag(state.highlights_name[stack[idx]]))
+              end
+              table.remove(stack, index)
             end
-            table.remove(stack, index)
           end
         end
 
@@ -1111,16 +1114,16 @@ local function extend_pre(out, state)
   for row = 1, state.buflen + 1 do
     loop(row)
   end
-  assert(#stack == 0, "an open HTML tag was never closed")
-  out[#out] = out[#out] .. "</pre>"
-end
 
---- @param out string[]
---- @param fn fun()
-local function extend_body(out, fn)
-  table.insert(out, '<body style="display: flex">')
-  fn()
-  table.insert(out, "</body>")
+  while #stack > 0 do
+    local item = table.remove(stack)
+    local name = state.highlights_name[item]
+    out[#out] = out[#out] .. name_to_closetag(name)
+  end
+
+  assert(#stack == 0, "an open HTML tag was never closed")
+
+  out[#out] = out[#out] .. "</pre>"
 end
 
 --- @param winid integer
@@ -1253,6 +1256,17 @@ function M.tohtml(winid, opt)
 
   for k, v in pairs(current_options) do
     vim.o[k] = v
+  end
+
+  local len_whitespace = 100
+  for i, line in ipairs(lines) do
+    if i > 2 and i <= #lines - 2 and #line > 0 then
+      len_whitespace = math.min(len_whitespace, #line:match "^%s*")
+    end
+  end
+
+  for i, line in ipairs(lines) do
+    lines[i] = line:gsub("^" .. string.rep("%s", len_whitespace), "")
   end
 
   vim.fn.setreg("+", table.concat(lines, "\n"))

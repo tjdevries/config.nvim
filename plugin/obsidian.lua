@@ -17,8 +17,30 @@ vim.api.nvim_create_user_command("RunObsidian", function(args)
 
   local opts = {}
   local lines = require("custom.to-obsidian-html").tohtml(0, opts)
-  io.stderr:write("Trying to open " .. filename .. "\n")
-  io.stderr:write("Current working directory: " .. vim.fn.getcwd() .. "\n")
   io.stderr:write(table.concat(lines, "\n"))
   io.stderr:flush()
 end, { nargs = 1 })
+
+vim.api.nvim_create_user_command("EditObsidian", function(args)
+  vim.opt.title = true
+  vim.opt.titlestring = "edit-obisidian"
+
+  vim.api.nvim_create_autocmd("VimLeavePre", {
+    callback = function()
+      local lines = require("custom.to-obsidian-html").tohtml(0, {})
+      io.stderr:write(table.concat(lines))
+    end,
+  })
+
+  vim.cmd.edit(args.args)
+end, { nargs = 1 })
+
+vim.diagnostic.set(vim.api.nvim_create_namespace "Blog", 0, {
+  {
+    lnum = 20,
+    col = 2,
+    end_col = 11,
+    severity = vim.diagnostic.severity.HINT,
+    message = "Incredibly useful message",
+  },
+})
