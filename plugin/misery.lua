@@ -6,6 +6,10 @@
 -- related to misery.nvim, not towards my real config
 --
 --]]
+if not vim.uv.fs_stat "/home/tjdevries/plugins/misery.nvim/plugin/misery.lua" then
+  return
+end
+
 vim.opt.rtp:append "/home/tjdevries/plugins/misery.nvim"
 vim.opt.rtp:append "/home/tjdevries/plugins/websocket.nvim"
 
