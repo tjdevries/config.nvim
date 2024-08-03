@@ -56,20 +56,22 @@ return {
         rust_analyzer = true,
         svelte = true,
         templ = true,
-        cssls = true,
         taplo = true,
 
         pyright = true,
+        mojo = { manual_install = true },
 
-        -- Probably want to disable formatting for this lang server
+        -- Enabled biome formatting, turn off all the other ones generally
+        biome = true,
         tsserver = {
           server_capabilities = {
             documentFormattingProvider = false,
           },
         },
-        biome = true,
-
         jsonls = {
+          server_capabilities = {
+            documentFormattingProvider = false,
+          },
           settings = {
             json = {
               schemas = require("schemastore").json.schemas(),
@@ -77,6 +79,12 @@ return {
             },
           },
         },
+
+        -- cssls = {
+        --   server_capabilities = {
+        --     documentFormattingProvider = false,
+        --   },
+        -- },
 
         yamlls = {
           settings = {
@@ -151,6 +159,33 @@ return {
           init_options = { clangdFileStatus = true },
 
           filetypes = { "c" },
+        },
+
+        tailwindcss = {
+          init_options = {
+            userLanguages = {
+              elixir = "phoenix-heex",
+              eruby = "erb",
+              heex = "phoenix-heex",
+            },
+          },
+          settings = {
+            tailwindCSS = {
+              experimental = {
+                classRegex = {
+                  [[class: "([^"]*)]],
+                },
+              },
+              -- filetypes_include = { "heex" },
+              -- init_options = {
+              --   userLanguages = {
+              --     elixir = "html-eex",
+              --     eelixir = "html-eex",
+              --     heex = "html-eex",
+              --   },
+              -- },
+            },
+          },
         },
       }
 
@@ -249,6 +284,15 @@ return {
 
       require("lsp_lines").setup()
       vim.diagnostic.config { virtual_text = true, virtual_lines = false }
+
+      vim.keymap.set("", "<leader>l", function()
+        local config = vim.diagnostic.config() or {}
+        if config.virtual_text then
+          vim.diagnostic.config { virtual_text = false, virtual_lines = true }
+        else
+          vim.diagnostic.config { virtual_text = true, virtual_lines = false }
+        end
+      end, { desc = "Toggle lsp_lines" })
     end,
   },
 }
