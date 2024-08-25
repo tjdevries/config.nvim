@@ -5,6 +5,7 @@ return {
       vim.g.parinfer_filetypes = {
         "dune",
         "scheme",
+        "query",
       }
     end,
   },

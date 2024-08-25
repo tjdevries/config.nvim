@@ -16,7 +16,6 @@ return {
   { "rose-pine/neovim", name = "rose-pine" },
   "eldritch-theme/eldritch.nvim",
   "jesseleite/nvim-noirbuddy",
-  "vim-scripts/MountainDew.vim",
   "miikanissi/modus-themes.nvim",
   "rebelot/kanagawa.nvim",
   "gremble0/yellowbeans.nvim",

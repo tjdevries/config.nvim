@@ -58,3 +58,25 @@ end)
 set("n", "<space>tt", function()
   vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = 0 }, { bufnr = 0 })
 end)
+
+vim.api.nvim_set_keymap("n", "<leader>t", "<Plug>PlenaryTestFile", { noremap = false, silent = false })
+
+set("n", "j", function(...)
+  local count = vim.v.count
+
+  if count == 0 then
+    return "gj"
+  else
+    return "j"
+  end
+end, { expr = true })
+
+set("n", "k", function(...)
+  local count = vim.v.count
+
+  if count == 0 then
+    return "gk"
+  else
+    return "k"
+  end
+end, { expr = true })

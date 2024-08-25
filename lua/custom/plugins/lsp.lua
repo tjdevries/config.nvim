@@ -57,6 +57,7 @@ return {
         svelte = true,
         templ = true,
         taplo = true,
+        intelephense = true,
 
         pyright = true,
         mojo = { manual_install = true },
@@ -97,6 +98,8 @@ return {
             },
           },
         },
+
+        ols = {},
 
         ocamllsp = {
           manual_install = true,
@@ -245,6 +248,7 @@ return {
 
           vim.keymap.set("n", "<space>cr", vim.lsp.buf.rename, { buffer = 0 })
           vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, { buffer = 0 })
+          vim.keymap.set("n", "<space>wd", builtin.lsp_document_symbols, { buffer = 0 })
 
           local filetype = vim.bo[bufnr].filetype
           if disable_semantic_tokens[filetype] then
@@ -266,9 +270,20 @@ return {
       })
 
       -- Autoformatting Setup
-      require("conform").setup {
+      local conform = require "conform"
+      conform.setup {
         formatters_by_ft = {
           lua = { "stylua" },
+          blade = { "blade-formatter" },
+        },
+      }
+
+      conform.formatters.injected = {
+        options = {
+          ignore_errors = false,
+          lang_to_formatters = {
+            sql = { "sleek" },
+          },
         },
       }
 
