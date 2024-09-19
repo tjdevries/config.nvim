@@ -17,6 +17,11 @@ return {
       "b0o/SchemaStore.nvim",
     },
     config = function()
+      -- Don't do LSP stuff if we're in Obsidian Edit mode
+      if vim.g.obsidian then
+        return
+      end
+
       require("neodev").setup {
         -- library = {
         --   plugins = { "nvim-dap-ui" },
@@ -103,18 +108,20 @@ return {
 
         ocamllsp = {
           manual_install = true,
+          cmd = { "dune", "exec", "ocamllsp" },
           settings = {
             codelens = { enable = true },
             inlayHints = { enable = true },
             syntaxDocumentation = { enable = true },
           },
 
-          -- get_language_id = function(lang)
-          --   local map = {
-          --     ["ocaml.mlx"] = "mlx",
-          --   }
-          --   return map[lang] or lang
-          -- end,
+          get_language_id = function(_, lang)
+            print("LANG:", lang)
+            local map = {
+              ["ocaml.mlx"] = "ocaml",
+            }
+            return map[lang] or lang
+          end,
 
           filetypes = {
             "ocaml",
@@ -123,6 +130,7 @@ return {
             "ocaml.cram",
             "ocaml.mlx",
             "ocaml.ocamllex",
+            "reason",
           },
 
           server_capabilities = {
@@ -289,6 +297,13 @@ return {
 
       vim.api.nvim_create_autocmd("BufWritePre", {
         callback = function(args)
+          -- local filename = vim.fn.expand "%:p"
+
+          local extension = vim.fn.expand "%:e"
+          if extension == "mlx" then
+            return
+          end
+
           require("conform").format {
             bufnr = args.buf,
             lsp_fallback = true,

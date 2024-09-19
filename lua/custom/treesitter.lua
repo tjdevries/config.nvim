@@ -62,6 +62,29 @@ M.setup = function()
           files = { "src/parser.c" },
         },
       }
+
+      parsers.reason = {
+        tier = 0,
+
+        ---@diagnostic disable-next-line: missing-fields
+        install_info = {
+          url = "https://github.com/reasonml-editor/tree-sitter-reason",
+          files = { "src/parser.c", "src/scanner.c" },
+          branch = "master",
+        },
+      }
+
+      parsers.ocaml_mlx = {
+        tier = 0,
+
+        install_info = {
+          location = "grammars/mlx",
+          url = "https://github.com/ocaml-mlx/tree-sitter-mlx",
+          files = { "src/parser.c", "src/scanner.c" },
+          branch = "master",
+        },
+        filetype = "ocaml.mlx",
+      }
     end,
   })
 end

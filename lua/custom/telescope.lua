@@ -1,6 +1,9 @@
 local data = assert(vim.fn.stdpath "data") --[[@as string]]
 
 require("telescope").setup {
+  defaults = {
+    file_ignore_patterns = { "dune.lock" },
+  },
   extensions = {
     wrap_results = true,
 
