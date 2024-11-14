@@ -6,6 +6,7 @@ return {
         "dune",
         "scheme",
         "query",
+        "racket",
       }
     end,
   },

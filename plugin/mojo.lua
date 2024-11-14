@@ -1,1 +1,1 @@
-vim.treesitter.language.register("mojo", "python")
+-- vim.treesitter.language.register("mojo", "python")

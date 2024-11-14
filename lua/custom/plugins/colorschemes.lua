@@ -32,6 +32,7 @@ return {
   "LuRsT/austere.vim",
   "ricardoraposo/gruvbox-minor.nvim",
   "NTBBloodbath/sweetie.nvim",
+  "vim-scripts/MountainDew.vim",
   {
     "maxmx03/fluoromachine.nvim",
     -- config = function()

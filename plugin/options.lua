@@ -31,3 +31,5 @@ opt.tabstop = 4
 opt.shiftwidth = 4
 
 opt.more = false
+
+opt.foldmethod = "manual"

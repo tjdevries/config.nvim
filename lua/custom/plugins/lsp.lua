@@ -2,13 +2,27 @@ return {
   {
     "neovim/nvim-lspconfig",
     dependencies = {
-      "folke/neodev.nvim",
+      {
+        -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
+        -- used for completion, annotations and signatures of Neovim apis
+        "folke/lazydev.nvim",
+        ft = "lua",
+        opts = {
+          library = {
+            -- Load luvit types when the `vim.uv` word is found
+            { path = "luvit-meta/library", words = { "vim%.uv" } },
+          },
+        },
+      },
+      { "Bilal2453/luvit-meta", lazy = true },
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
       "WhoIsSethDaniel/mason-tool-installer.nvim",
 
       { "j-hui/fidget.nvim", opts = {} },
       { "https://git.sr.ht/~whynothugo/lsp_lines.nvim" },
+
+      { "elixir-tools/elixir-tools.nvim" },
 
       -- Autoformatting
       "stevearc/conform.nvim",
@@ -22,12 +36,28 @@ return {
         return
       end
 
-      require("neodev").setup {
-        -- library = {
-        --   plugins = { "nvim-dap-ui" },
-        --   types = true,
-        -- },
-      }
+      local extend = function(name, key, values)
+        local mod = require(string.format("lspconfig.configs.%s", name))
+        local default = mod.default_config
+        local keys = vim.split(key, ".", { plain = true })
+        while #keys > 0 do
+          local item = table.remove(keys, 1)
+          default = default[item]
+        end
+
+        if vim.islist(default) then
+          for _, value in ipairs(default) do
+            table.insert(values, value)
+          end
+        else
+          for item, value in pairs(default) do
+            if not vim.tbl_contains(values, item) then
+              values[item] = value
+            end
+          end
+        end
+        return values
+      end
 
       local capabilities = nil
       if pcall(require, "cmp_nvim_lsp") then
@@ -69,11 +99,14 @@ return {
 
         -- Enabled biome formatting, turn off all the other ones generally
         biome = true,
-        tsserver = {
+        ts_ls = {
+          root_dir = require("lspconfig").util.root_pattern "package.json",
+          single_file = false,
           server_capabilities = {
             documentFormattingProvider = false,
           },
         },
+        -- denols = true,
         jsonls = {
           server_capabilities = {
             documentFormattingProvider = false,
@@ -105,10 +138,12 @@ return {
         },
 
         ols = {},
+        racket_langserver = { manual_install = true },
 
         ocamllsp = {
           manual_install = true,
-          cmd = { "dune", "exec", "ocamllsp" },
+          cmd = { "dune", "tools", "exec", "ocamllsp" },
+          -- cmd = { "dune", "exec", "ocamllsp" },
           settings = {
             codelens = { enable = true },
             inlayHints = { enable = true },
@@ -116,7 +151,6 @@ return {
           },
 
           get_language_id = function(_, lang)
-            print("LANG:", lang)
             local map = {
               ["ocaml.mlx"] = "ocaml",
             }
@@ -144,22 +178,22 @@ return {
           manual_install = true,
         },
 
-        elixirls = {
-          cmd = { "/home/tjdevries/.local/share/nvim/mason/bin/elixir-ls" },
-          root_dir = require("lspconfig.util").root_pattern { "mix.exs" },
-          server_capabilities = {
-            -- completionProvider = true,
-            -- definitionProvider = false,
-            documentFormattingProvider = false,
-          },
-        },
+        -- elixirls = {
+        --   cmd = { "/home/tjdevries/.local/share/nvim/mason/bin/elixir-ls" },
+        --   root_dir = require("lspconfig.util").root_pattern { "mix.exs" },
+        --   -- server_capabilities = {
+        --   --   -- completionProvider = true,
+        --   --   definitionProvider = true,
+        --   --   documentFormattingProvider = false,
+        --   -- },
+        -- },
 
         lexical = {
           cmd = { "/home/tjdevries/.local/share/nvim/mason/bin/lexical", "server" },
           root_dir = require("lspconfig.util").root_pattern { "mix.exs" },
           server_capabilities = {
             completionProvider = vim.NIL,
-            definitionProvider = false,
+            definitionProvider = true,
           },
         },
 
@@ -180,6 +214,7 @@ return {
               heex = "phoenix-heex",
             },
           },
+          filetypes = extend("tailwindcss", "filetypes", { "ocaml.mlx" }),
           settings = {
             tailwindCSS = {
               experimental = {
@@ -187,14 +222,9 @@ return {
                   [[class: "([^"]*)]],
                 },
               },
-              -- filetypes_include = { "heex" },
-              -- init_options = {
-              --   userLanguages = {
-              --     elixir = "html-eex",
-              --     eelixir = "html-eex",
-              --     heex = "html-eex",
-              --   },
-              -- },
+              includeLanguages = extend("tailwindcss", "settings.tailwindCSS.includeLanguages", {
+                ["ocaml.mlx"] = "html",
+              }),
             },
           },
         },
@@ -277,40 +307,7 @@ return {
         end,
       })
 
-      -- Autoformatting Setup
-      local conform = require "conform"
-      conform.setup {
-        formatters_by_ft = {
-          lua = { "stylua" },
-          blade = { "blade-formatter" },
-        },
-      }
-
-      conform.formatters.injected = {
-        options = {
-          ignore_errors = false,
-          lang_to_formatters = {
-            sql = { "sleek" },
-          },
-        },
-      }
-
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        callback = function(args)
-          -- local filename = vim.fn.expand "%:p"
-
-          local extension = vim.fn.expand "%:e"
-          if extension == "mlx" then
-            return
-          end
-
-          require("conform").format {
-            bufnr = args.buf,
-            lsp_fallback = true,
-            quiet = true,
-          }
-        end,
-      })
+      require("custom.autoformat").setup()
 
       require("lsp_lines").setup()
       vim.diagnostic.config { virtual_text = true, virtual_lines = false }
@@ -323,6 +320,8 @@ return {
           vim.diagnostic.config { virtual_text = true, virtual_lines = false }
         end
       end, { desc = "Toggle lsp_lines" })
+
+      require("custom.elixir").setup()
     end,
   },
 }
