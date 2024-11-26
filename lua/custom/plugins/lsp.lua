@@ -140,6 +140,7 @@ return {
 
         ols = {},
         racket_langserver = { manual_install = true },
+        roc_ls = { manual_install = true },
 
         ocamllsp = {
           manual_install = true,
