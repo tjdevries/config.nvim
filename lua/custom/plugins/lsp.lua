@@ -29,6 +29,7 @@ return {
 
       -- Schema information
       "b0o/SchemaStore.nvim",
+      { dir = "~/plugins/ocaml.nvim" },
     },
     config = function()
       -- Don't do LSP stuff if we're in Obsidian Edit mode
@@ -150,26 +151,7 @@ return {
             syntaxDocumentation = { enable = true },
           },
 
-          get_language_id = function(_, lang)
-            local map = {
-              ["ocaml.mlx"] = "ocaml",
-            }
-            return map[lang] or lang
-          end,
-
-          filetypes = {
-            "ocaml",
-            "ocaml.interface",
-            "ocaml.menhir",
-            "ocaml.cram",
-            "ocaml.mlx",
-            "ocaml.ocamllex",
-            "reason",
-          },
-
-          server_capabilities = {
-            semanticTokensProvider = false,
-          },
+          server_capabilities = { semanticTokensProvider = false },
 
           -- TODO: Check if i still need the filtypes stuff i had before
         },
@@ -220,6 +202,7 @@ return {
               experimental = {
                 classRegex = {
                   [[class: "([^"]*)]],
+                  [[className="([^"]*)]],
                 },
               },
               includeLanguages = extend("tailwindcss", "settings.tailwindCSS.includeLanguages", {
@@ -229,6 +212,8 @@ return {
           },
         },
       }
+
+      require("ocaml").setup()
 
       local servers_to_install = vim.tbl_filter(function(key)
         local t = servers[key]

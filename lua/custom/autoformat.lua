@@ -17,6 +17,7 @@ local setup = function()
       lua = { "stylua" },
       blade = { "blade-formatter" },
       ocaml = { "ml-format" },
+      ocaml_mlx = { "ocamlformat_mlx" },
     },
   }
 
@@ -38,7 +39,7 @@ local setup = function()
         -- it seems like it should be automatic, but that's OK
         require("conform").format {
           bufnr = args.buf,
-          formatters = { "mlx-format" },
+          formatters = { "ocamlformat_mlx" },
           lsp_fallback = false,
         }
 

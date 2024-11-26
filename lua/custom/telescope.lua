@@ -25,7 +25,9 @@ pcall(require("telescope").load_extension, "ui-select")
 local builtin = require "telescope.builtin"
 
 vim.keymap.set("n", "<space>fd", builtin.find_files)
-vim.keymap.set("n", "<space>ft", builtin.git_files)
+vim.keymap.set("n", "<space>ft", function()
+  return builtin.git_files { cwd = vim.fn.expand "%:h" }
+end)
 vim.keymap.set("n", "<space>fh", builtin.help_tags)
 vim.keymap.set("n", "<space>fg", require "custom.telescope.multi-ripgrep")
 vim.keymap.set("n", "<space>fb", builtin.buffers)
