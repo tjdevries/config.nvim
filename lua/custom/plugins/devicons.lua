@@ -19,6 +19,11 @@ return {
           color = ocaml_color,
           name = "mlx",
         },
+        mly = {
+          icon = ocaml_icon,
+          color = ocaml_color,
+          name = "mlx",
+        },
         re = {
           icon = ocaml_icon,
           color = "#dd4B39",

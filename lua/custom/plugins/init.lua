@@ -1,7 +1,10 @@
 return {
+  { dir = "~/git/LamboLSP" },
   { dir = "~/plugins/boot.nvim" },
+  { dir = "~/plugins/present.nvim" },
   { dir = "~/git/tree-sitter-cram" },
-  { dir = "~/plugins/css.nvim/" },
+  { dir = "~/plugins/chat-llm.nvim" },
+  -- { dir = "~/plugins/css.nvim/" },
   { dir = "~/plugins/php.nvim/" },
   -- { "CWood-sdf/banana.nvim" },
   { dir = "~/plugins/two-idiots-one-keyboard.nvim/" },

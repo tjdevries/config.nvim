@@ -5,6 +5,9 @@
 --]]
 vim.g.mapleader = ","
 
+-- Load dotenv, if it exists
+require("custom.dotenv").eval(vim.fs.joinpath(vim.fn.stdpath "config", ".env")) ---@diagnostic disable-line: param-type-mismatch
+
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
 if not vim.uv.fs_stat(lazypath) then
   vim.fn.system {

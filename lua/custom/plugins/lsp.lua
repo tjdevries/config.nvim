@@ -11,6 +11,7 @@ return {
           library = {
             -- Load luvit types when the `vim.uv` word is found
             { path = "luvit-meta/library", words = { "vim%.uv" } },
+            { path = "/usr/share/awesome/lib/", words = { "awesome" } },
           },
         },
       },
@@ -70,6 +71,7 @@ return {
       local servers = {
         bashls = true,
         gopls = {
+          manual_install = true,
           settings = {
             gopls = {
               hints = {
@@ -96,13 +98,19 @@ return {
         intelephense = true,
 
         pyright = true,
-        mojo = { manual_install = true },
+        ruff = { manual_install = true },
+        -- mojo = { manual_install = true },
 
         -- Enabled biome formatting, turn off all the other ones generally
         biome = true,
-        ts_ls = {
-          root_dir = require("lspconfig").util.root_pattern "package.json",
-          single_file = false,
+        -- ts_ls = {
+        --   root_dir = require("lspconfig").util.root_pattern "package.json",
+        --   single_file = false,
+        --   server_capabilities = {
+        --     documentFormattingProvider = false,
+        --   },
+        -- },
+        vtsls = {
           server_capabilities = {
             documentFormattingProvider = false,
           },

@@ -40,7 +40,7 @@ cmp.setup {
       -- set group index to 0 to skip loading LuaLS completions as lazydev recommends it
       group_index = 0,
     },
-    { name = "copilot" },
+    -- { name = "supermaven" },
     { name = "nvim_lsp" },
     { name = "path" },
     { name = "buffer" },
@@ -81,8 +81,6 @@ cmp.setup {
   sorting = {
     priority_weight = 2,
     comparators = {
-      require("copilot_cmp.comparators").prioritize,
-
       -- Below is the default comparitor list and order for nvim-cmp
       cmp.config.compare.offset,
       -- cmp.config.compare.scopes, --this is commented in nvim-cmp too

@@ -11,17 +11,16 @@ return {
       { "L3MON4D3/LuaSnip", build = "make install_jsregexp" },
       "saadparwaiz1/cmp_luasnip",
       "roobert/tailwindcss-colorizer-cmp.nvim",
-      "zbirenbaum/copilot.lua",
-      "zbirenbaum/copilot-cmp",
+      {
+        "supermaven-inc/supermaven-nvim",
+        config = function()
+          require("supermaven-nvim").setup {
+            -- disable_inline_completion = true,
+          }
+        end,
+      },
     },
     config = function()
-      require("copilot").setup {
-        suggestion = { enabled = false },
-        panel = { enabled = false },
-      }
-
-      require("copilot_cmp").setup()
-
       require "custom.completion"
     end,
   },

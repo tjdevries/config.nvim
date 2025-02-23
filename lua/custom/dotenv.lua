@@ -50,4 +50,12 @@ return {
 
     return {}
   end,
+  eval = function(file, force)
+    local parsed = parse_env_file(file)
+    for k, v in pairs(parsed) do
+      if force or not vim.env[k] then
+        vim.env[k] = v
+      end
+    end
+  end,
 }
