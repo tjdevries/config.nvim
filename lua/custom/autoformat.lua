@@ -34,6 +34,17 @@ local setup = function()
     group = vim.api.nvim_create_augroup("custom-conform", { clear = true }),
     callback = function(args)
       local ft = vim.bo.filetype
+      if ft == "blade" then
+        require("conform").format {
+          bufnr = args.buf,
+          lsp_fallback = false,
+          quiet = true,
+          async = true,
+        }
+
+        return
+      end
+
       if ft == "ocaml.mlx" then
         -- Hmmm... this is a little weird,
         -- it seems like it should be automatic, but that's OK
