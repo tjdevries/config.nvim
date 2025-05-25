@@ -86,16 +86,25 @@ return {
             },
           },
         },
+        glsl_analyzer = true,
         lua_ls = {
-          server_capabilities = {
-            semanticTokensProvider = vim.NIL,
-          },
+          -- server_capabilities = {
+          --   semanticTokensProvider = vim.NIL,
+          -- },
         },
         rust_analyzer = true,
         svelte = true,
         templ = true,
         taplo = true,
-        intelephense = true,
+        intelephense = {
+          settings = {
+            intelephense = {
+              format = {
+                braces = "k&r",
+              },
+            },
+          },
+        },
 
         pyright = true,
         ruff = { manual_install = true },
@@ -103,6 +112,7 @@ return {
 
         -- Enabled biome formatting, turn off all the other ones generally
         biome = true,
+        astro = true,
         -- ts_ls = {
         --   root_dir = require("lspconfig").util.root_pattern "package.json",
         --   single_file = false,
@@ -256,7 +266,7 @@ return {
       end
 
       local disable_semantic_tokens = {
-        lua = true,
+        -- lua = true,
       }
 
       vim.api.nvim_create_autocmd("LspAttach", {

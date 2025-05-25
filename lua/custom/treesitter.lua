@@ -43,15 +43,15 @@ M.setup = function()
     callback = function()
       local parsers = require "nvim-treesitter.parsers"
 
-      parsers.lua = {
-        tier = 0,
-
-        ---@diagnostic disable-next-line: missing-fields
-        install_info = {
-          path = "~/plugins/tree-sitter-lua",
-          files = { "src/parser.c", "src/scanner.c" },
-        },
-      }
+      -- parsers.lua = {
+      --   tier = 0,
+      --
+      --   ---@diagnostic disable-next-line: missing-fields
+      --   install_info = {
+      --     path = "~/plugins/tree-sitter-lua",
+      --     files = { "src/parser.c", "src/scanner.c" },
+      --   },
+      -- }
 
       parsers.cram = {
         tier = 0,
