@@ -2,6 +2,7 @@ local conf = require("telescope.config").values
 local finders = require "telescope.finders"
 local make_entry = require "telescope.make_entry"
 local pickers = require "telescope.pickers"
+local sorters = require "telescope.sorters"
 
 local flatten = vim.tbl_flatten
 
@@ -58,13 +59,24 @@ return function(opts)
     cwd = opts.cwd,
   }
 
+  local sorter = sorters.Sorter:new {
+    scoring_function = function()
+      return 1
+    end,
+    highlighter = function(_, prompt, display)
+      local fzy = opts.fzy_mod or require "telescope.algos.fzy"
+      local pieces = vim.split(prompt, "  ")
+      return fzy.positions(pieces[1], display)
+    end,
+  }
+
   pickers
     .new(opts, {
       debounce = 100,
       prompt_title = "Live Grep (with shortcuts)",
       finder = custom_grep,
       previewer = conf.grep_previewer(opts),
-      sorter = require("telescope.sorters").empty(),
+      sorter = sorter,
     })
     :find()
 end
