@@ -34,6 +34,7 @@ return {
   "ricardoraposo/gruvbox-minor.nvim",
   "NTBBloodbath/sweetie.nvim",
   "vim-scripts/MountainDew.vim",
+  { "rose-pine/neovim", name = "rose-pine" },
   {
     "maxmx03/fluoromachine.nvim",
     -- config = function()

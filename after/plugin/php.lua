@@ -1,4 +1,4 @@
-if true or not pcall(require, "php") then
+if not pcall(require, "php") then
   return
 end
 
