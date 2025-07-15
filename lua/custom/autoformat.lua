@@ -4,7 +4,8 @@ local setup = function()
   conform.setup {
     formatters = {
       ["ml-format"] = {
-        command = "./_build/_private/default/.dev-tool/ocamlformat/ocamlformat/target/bin/ocamlformat",
+        -- command = "./_build/_private/default/.dev-tool/ocamlformat/ocamlformat/target/bin/ocamlformat",
+        command = "ocamlformat",
         args = {
           "--enable-outside-detected-project",
           "--name",

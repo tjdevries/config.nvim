@@ -162,8 +162,9 @@ return {
 
         ocamllsp = {
           manual_install = true,
-          cmd = { "dune", "tools", "exec", "ocamllsp" },
+          -- cmd = { "dune", "tools", "exec", "ocamllsp" },
           -- cmd = { "dune", "exec", "ocamllsp" },
+          cmd = { "ocamllsp" },
           settings = {
             codelens = { enable = true },
             inlayHints = { enable = true },
