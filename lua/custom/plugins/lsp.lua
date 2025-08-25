@@ -23,8 +23,6 @@ return {
       { "j-hui/fidget.nvim", opts = {} },
       { "https://git.sr.ht/~whynothugo/lsp_lines.nvim" },
 
-      { "elixir-tools/elixir-tools.nvim" },
-
       -- Autoformatting
       "stevearc/conform.nvim",
 
@@ -88,6 +86,7 @@ return {
         },
         glsl_analyzer = true,
         lua_ls = {
+          cmd = { "lua-language-server" },
           -- server_capabilities = {
           --   semanticTokensProvider = vim.NIL,
           -- },
@@ -180,24 +179,19 @@ return {
           manual_install = true,
         },
 
-        -- elixirls = {
-        --   cmd = { "/home/tjdevries/.local/share/nvim/mason/bin/elixir-ls" },
-        --   root_dir = require("lspconfig.util").root_pattern { "mix.exs" },
-        --   -- server_capabilities = {
-        --   --   -- completionProvider = true,
-        --   --   definitionProvider = true,
-        --   --   documentFormattingProvider = false,
-        --   -- },
-        -- },
-
-        lexical = {
-          cmd = { "/home/tjdevries/.local/share/nvim/mason/bin/lexical", "server" },
+        elixirls = {
+          cmd = { "/home/tjdevries/.local/share/nvim/mason/bin/elixir-ls" },
           root_dir = require("lspconfig.util").root_pattern { "mix.exs" },
-          server_capabilities = {
-            completionProvider = vim.NIL,
-            definitionProvider = true,
-          },
         },
+
+        -- lexical = {
+        --   cmd = { "/home/tjdevries/.local/share/nvim/mason/bin/lexical", "server" },
+        --   root_dir = require("lspconfig.util").root_pattern { "mix.exs" },
+        --   server_capabilities = {
+        --     completionProvider = vim.NIL,
+        --     definitionProvider = true,
+        --   },
+        -- },
 
         clangd = {
           -- cmd = { "clangd", unpack(require("custom.clangd").flags) },
@@ -292,6 +286,9 @@ return {
           vim.keymap.set("n", "<space>cr", vim.lsp.buf.rename, { buffer = 0 })
           vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, { buffer = 0 })
           vim.keymap.set("n", "<space>wd", builtin.lsp_document_symbols, { buffer = 0 })
+          vim.keymap.set("n", "<space>ww", function()
+            builtin.diagnostics { root_dir = true }
+          end, { buffer = 0 })
 
           local filetype = vim.bo[bufnr].filetype
           if disable_semantic_tokens[filetype] then
@@ -325,8 +322,6 @@ return {
           vim.diagnostic.config { virtual_text = true, virtual_lines = false }
         end
       end, { desc = "Toggle lsp_lines" })
-
-      require("custom.elixir").setup()
     end,
   },
 }

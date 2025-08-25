@@ -80,3 +80,6 @@ set("n", "k", function(...)
     return "k"
   end
 end, { expr = true })
+
+vim.keymap.set("n", "]]", "<cmd>cnext<CR>", { silent = true })
+vim.keymap.set("n", "[[", "<cmd>cprev<CR>", { silent = true })

@@ -1,4 +1,5 @@
 return {
+  { dir = "~/terminal/media" },
   { dir = "~/git/LamboLSP" },
   { dir = "~/plugins/boot.nvim" },
   { dir = "~/plugins/present.nvim" },
