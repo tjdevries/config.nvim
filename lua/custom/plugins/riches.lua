@@ -1,5 +1,6 @@
 return {
   {
+    enabled = false,
     dir = "~/plugins/riches.nvim/",
     dependencies = {
       "stevearc/aerial.nvim",

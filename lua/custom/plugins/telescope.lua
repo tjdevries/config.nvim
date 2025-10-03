@@ -1,7 +1,7 @@
 return {
-  { dir = "~/plugins/plenary.nvim" },
+  { "nvim-lua/plenary.nvim" },
   {
-    dir = "~/plugins/telescope.nvim/",
+   "nvim-telescope/telescope.nvim",
     dependencies = {
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 

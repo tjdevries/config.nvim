@@ -28,7 +28,7 @@ return {
 
       -- Schema information
       "b0o/SchemaStore.nvim",
-      { dir = "~/plugins/ocaml.nvim" },
+      -- { dir = "~/plugins/ocaml.nvim" },
     },
     config = function()
       -- Don't do LSP stuff if we're in Obsidian Edit mode
@@ -159,21 +159,21 @@ return {
         racket_langserver = { manual_install = true },
         roc_ls = { manual_install = true },
 
-        ocamllsp = {
-          manual_install = true,
-          -- cmd = { "dune", "tools", "exec", "ocamllsp" },
-          -- cmd = { "dune", "exec", "ocamllsp" },
-          cmd = { "ocamllsp" },
-          settings = {
-            codelens = { enable = true },
-            inlayHints = { enable = true },
-            syntaxDocumentation = { enable = true },
-          },
-
-          server_capabilities = { semanticTokensProvider = false },
-
-          -- TODO: Check if i still need the filtypes stuff i had before
-        },
+        -- ocamllsp = {
+        --   manual_install = true,
+        --   -- cmd = { "dune", "tools", "exec", "ocamllsp" },
+        --   -- cmd = { "dune", "exec", "ocamllsp" },
+        --   cmd = { "ocamllsp" },
+        --   settings = {
+        --     codelens = { enable = true },
+        --     inlayHints = { enable = true },
+        --     syntaxDocumentation = { enable = true },
+        --   },
+        --
+        --   server_capabilities = { semanticTokensProvider = false },
+        --
+        --   -- TODO: Check if i still need the filtypes stuff i had before
+        -- },
 
         gleam = {
           manual_install = true,
@@ -227,7 +227,7 @@ return {
         },
       }
 
-      require("ocaml").setup()
+      -- require("ocaml").setup()
 
       local servers_to_install = vim.tbl_filter(function(key)
         local t = servers[key]
