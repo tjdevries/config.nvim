@@ -1,9 +1,7 @@
 local ok, elixir = pcall(require, "elixir")
 if not ok then
-  return
+  return { setup = function() end }
 end
-
--- local elixirls = require "elixir.elixirls"
 
 local function setup()
   elixir.setup {

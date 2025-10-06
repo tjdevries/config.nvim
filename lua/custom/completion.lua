@@ -41,6 +41,7 @@ cmp.setup {
       group_index = 0,
     },
     -- { name = "supermaven" },
+    { name = "luasnip" },
     { name = "nvim_lsp" },
     { name = "path" },
     { name = "buffer" },
