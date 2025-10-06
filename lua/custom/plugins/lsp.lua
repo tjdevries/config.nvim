@@ -36,35 +36,10 @@ return {
         return
       end
 
-      local extend = function(name, key, values)
-        local mod = require(string.format("lspconfig.configs.%s", name))
-        local default = mod.default_config
-        local keys = vim.split(key, ".", { plain = true })
-        while #keys > 0 do
-          local item = table.remove(keys, 1)
-          default = default[item]
-        end
-
-        if vim.islist(default) then
-          for _, value in ipairs(default) do
-            table.insert(values, value)
-          end
-        else
-          for item, value in pairs(default) do
-            if not vim.tbl_contains(values, item) then
-              values[item] = value
-            end
-          end
-        end
-        return values
-      end
-
       local capabilities = nil
       if pcall(require, "cmp_nvim_lsp") then
         capabilities = require("cmp_nvim_lsp").default_capabilities()
       end
-
-      local lspconfig = require "lspconfig"
 
       local servers = {
         bashls = true,
@@ -181,7 +156,7 @@ return {
 
         elixirls = {
           cmd = { "/home/tjdevries/.local/share/nvim/mason/bin/elixir-ls" },
-          root_dir = require("lspconfig.util").root_pattern { "mix.exs" },
+          root_markers = { "mix.exs" },
         },
 
         -- lexical = {
@@ -210,7 +185,18 @@ return {
               heex = "phoenix-heex",
             },
           },
-          filetypes = extend("tailwindcss", "filetypes", { "ocaml.mlx" }),
+          filetypes = {
+            "html",
+            "css",
+            "scss",
+            "javascript",
+            "javascriptreact",
+            "typescript",
+            "typescriptreact",
+            "vue",
+            "svelte",
+            "ocaml.mlx",
+          },
           settings = {
             tailwindCSS = {
               experimental = {
@@ -219,9 +205,9 @@ return {
                   [[className="([^"]*)]],
                 },
               },
-              includeLanguages = extend("tailwindcss", "settings.tailwindCSS.includeLanguages", {
+              includeLanguages = {
                 ["ocaml.mlx"] = "html",
-              }),
+              },
             },
           },
         },
@@ -249,15 +235,26 @@ return {
       vim.list_extend(ensure_installed, servers_to_install)
       require("mason-tool-installer").setup { ensure_installed = ensure_installed }
 
+      -- Set global capabilities for all LSP servers
+      vim.lsp.config("*", {
+        capabilities = capabilities,
+      })
+
+      -- Configure and enable each LSP server
       for name, config in pairs(servers) do
         if config == true then
           config = {}
         end
-        config = vim.tbl_deep_extend("force", {}, {
-          capabilities = capabilities,
-        }, config)
 
-        lspconfig[name].setup(config)
+        -- Only call vim.lsp.config if there are server-specific settings
+        if next(config) ~= nil then
+          -- Remove manual_install flag as it's not an LSP config field
+          local lsp_config = vim.tbl_deep_extend("force", {}, config)
+          lsp_config.manual_install = nil
+          vim.lsp.config(name, lsp_config)
+        end
+
+        vim.lsp.enable(name)
       end
 
       local disable_semantic_tokens = {
