@@ -28,3 +28,38 @@ local function run_love()
 end
 
 vim.keymap.set("n", "<leader>rl", run_love, { desc = "Run love" })
+
+local function ripgrep_to_qf(search)
+  local output = vim.fn.system(string.format("rg --vimgrep --hidden --smart-case %q", search))
+  -- ripgrep + --vimgrep prints: file:line:col:match
+  local items = vim.split(output, "\n", { trimempty = true })
+
+  local qf = {}
+  for _, line in ipairs(items) do
+    local file, lnum, col, text = line:match "([^:]+):(%d+):(%d+):(.*)"
+    if file then
+      table.insert(qf, {
+        filename = file,
+        lnum = tonumber(lnum),
+        col = tonumber(col),
+        text = text,
+      })
+    end
+  end
+
+  vim.fn.setqflist(qf, "r")
+  vim.cmd "copen"
+end
+
+vim.keymap.set("n", "<leader>rm", function()
+  local file = vim.fn.expand "%:."
+
+  -- Replace slashes with dots
+  file = file:gsub("/", ".")
+
+  -- Remove .lua extension
+  file = file:gsub(".lua$", "")
+
+  -- Now search for the module in the project
+  ripgrep_to_qf(file)
+end, { desc = "is this module unused?" })
